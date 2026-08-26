@@ -1,0 +1,73 @@
+<!-- pages/index/index.wxml -->
+<view class="page">
+  <!-- 搜索栏 -->
+  <view class="search-bar">
+    <view class="search-input-wrap">
+      <text class="search-icon">🔍</text>
+      <input class="search-input" placeholder="搜索商品" value="{{keyword}}" bindinput="onKeyword" bindconfirm="onSearch" confirm-type="search" />
+      <view wx:if="{{keyword}}" class="clear-btn" bindtap="clearKeyword">✕</view>
+    </view>
+    <view class="search-btn" bindtap="onSearch">搜索</view>
+  </view>
+
+  <!-- 广告轮播 -->
+  <swiper wx:if="{{ads.length}}" class="ad-swiper" autoplay circular indicator-dots indicator-color="rgba(255,255,255,0.4)" indicator-active-color="#fff">
+    <swiper-item wx:for="{{ads}}" wx:key="slot">
+      <view class="ad-item" data-link="{{item.link}}" bindtap="goAd">
+        <image class="ad-img" src="{{item.imageUrl}}" mode="aspectFill" />
+      </view>
+    </swiper-item>
+  </swiper>
+
+  <!-- 分类(全展示) -->
+  <view class="category-grid">
+    <view class="cat-item {{category === item ? 'active' : ''}}"
+          wx:for="{{categories}}" wx:key="*this" data-cat="{{item}}" bindtap="selectCategory">
+      {{item}}
+    </view>
+  </view>
+
+  <!-- 大家都在看 -->
+  <view class="hot-section" wx:if="{{hotProducts.length}}">
+    <view class="section-header">
+      <text class="section-title">🔥 大家都在看</text>
+      <text class="section-desc">浏览量 20+</text>
+    </view>
+    <scroll-view scroll-x class="hot-scroll" enable-flex>
+      <view class="hot-card" wx:for="{{hotProducts}}" wx:key="id" data-id="{{item.id}}" bindtap="goDetail">
+        <image wx:if="{{item.imageUrl}}" class="hot-img" src="{{item.imageUrl}}" mode="aspectFill" lazy-load />
+        <view wx:else class="hot-img-ph" style="background:{{item.avatarColor}}">{{item.sellerInitial}}</view>
+        <view class="hot-name">{{item.name}}</view>
+        <view class="hot-price">{{item.priceText}}</view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 商品网格(一排四个) -->
+  <view class="goods-grid" wx:if="{{products.length}}">
+    <view class="goods-card" wx:for="{{products}}" wx:key="id" data-id="{{item.id}}" bindtap="goDetail">
+      <view class="goods-img-box">
+        <image wx:if="{{item.imageUrl}}" class="goods-img" src="{{item.imageUrl}}" mode="aspectFill" lazy-load />
+        <view wx:else class="goods-img-ph" style="background:{{item.avatarColor}}">
+          <text class="ph-text">{{item.sellerInitial}}</text>
+        </view>
+      </view>
+      <view class="goods-info">
+        <view class="goods-name">{{item.name}}</view>
+        <view class="goods-meta">
+          <text class="goods-price">{{item.priceText}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty" wx:if="{{!products.length}}">
+    <view class="empty-icon">📦</view>
+    <view>暂无商品</view>
+    <view class="text-sm text-muted" style="margin-top:12rpx">去挂出第一件吧</view>
+  </view>
+
+  <!-- 发布按钮 -->
+  <view class="fab" bindtap="goPublish">+</view>
+</view>

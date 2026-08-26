@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#10b981" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="骏宇超市" />
+  <link rel="manifest" href="/manifest.json" />
+  <title>管理员后台 - 骏宇超市</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="logo">
+      <span class="logo-mark">骏</span>
+      <span class="logo-text">管理员后台</span>
+    </div>
+    <div class="header-right">
+      <button class="btn-link" onclick="location.href='/'">返回超市</button>
+      <button class="btn-link" onclick="logout()">退出</button>
+    </div>
+  </header>
+
+  <main class="admin-main">
+    <!-- Sub tabs -->
+    <nav class="admin-tabs">
+      <button class="admin-tab active" data-atab="users" onclick="switchAdminTab('users')">用户</button>
+      <button class="admin-tab" data-atab="products" onclick="switchAdminTab('products')">商品</button>
+      <button class="admin-tab" data-atab="revenue" onclick="switchAdminTab('revenue')">平台收益</button>
+    </nav>
+
+    <!-- 用户管理 -->
+    <section class="admin-pane" id="atab-users">
+      <div class="pane-header">
+        <h3>用户管理</h3>
+        <span class="pane-sub" id="userCount"></span>
+      </div>
+      <div id="userList" class="admin-list"></div>
+    </section>
+
+    <!-- 商品状态 -->
+    <section class="admin-pane hidden" id="atab-products">
+      <div class="pane-header">
+        <h3>商品状态</h3>
+        <span class="pane-sub" id="productCount"></span>
+      </div>
+      <div id="adminProductList" class="admin-list"></div>
+    </section>
+
+    <!-- 平台收益 -->
+    <section class="admin-pane hidden" id="atab-revenue">
+      <div class="stats">
+        <div class="stat-card">
+          <div class="stat-label">累计平台收益</div>
+          <div class="stat-value" id="totalFee">¥0.00</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">可提取收益</div>
+          <div class="stat-value" id="availableFee">¥0.00</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">已提取</div>
+          <div class="stat-value" id="withdrawnFee">¥0.00</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">成交笔数</div>
+          <div class="stat-value" id="txCount">0</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>提取收益</h3>
+        <form onsubmit="return withdraw(event)" class="withdraw-form">
+          <label>提取金额 (元)
+            <input type="number" id="withdrawAmount" step="0.01" min="0.01" placeholder="留空则提取全部" />
+          </label>
+          <div class="withdraw-btns">
+            <button type="submit" class="btn btn-primary">提取</button>
+            <button type="button" class="btn" onclick="document.getElementById('withdrawAmount').value=''">清空</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card">
+        <h3>收益明细</h3>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr><th>时间</th><th>商品</th><th>买家</th><th>卖家</th><th>成交价</th><th>平台收益</th></tr>
+            </thead>
+            <tbody id="feeTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>全部交易记录</h3>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr><th>时间</th><th>商品</th><th>买家</th><th>卖家</th><th>成交价</th><th>状态</th><th>快递单号</th></tr>
+            </thead>
+            <tbody id="txTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 调整余额弹窗 -->
+  <div id="balanceModal" class="modal hidden">
+    <div class="modal-card">
+      <h3>调整余额</h3>
+      <p class="modal-sub" id="balanceUser"></p>
+      <form onsubmit="return submitBalance(event)">
+        <label>当前余额
+          <input type="text" id="balCurrent" readonly />
+        </label>
+        <label>新余额 (元)
+          <input type="number" id="balNew" step="0.01" min="0" required />
+        </label>
+        <div class="quick-buttons">
+          <button type="button" class="btn btn-small" onclick="quickAdd(100)">+100</button>
+          <button type="button" class="btn btn-small" onclick="quickAdd(500)">+500</button>
+          <button type="button" class="btn btn-small" onclick="quickAdd(1000)">+1000</button>
+          <button type="button" class="btn btn-small" onclick="quickSet(0)">清零</button>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn" onclick="closeBalanceModal()">取消</button>
+          <button type="submit" class="btn btn-primary">保存</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="/js/admin.js"></script>
+</body>
+</html>

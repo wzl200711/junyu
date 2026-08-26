@@ -1,0 +1,37 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/login/login",
+    "pages/detail/detail",
+    "pages/publish/publish",
+    "pages/me/me",
+    "pages/my-products/my-products",
+    "pages/orders/orders",
+    "pages/messages/messages",
+    "pages/chat/chat",
+    "pages/user-profile/user-profile",
+    "pages/public/public",
+    "pages/videos/videos"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#10b981",
+    "navigationBarTitleText": "骏宇超市",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f4f6f5",
+    "backgroundTextStyle": "dark"
+  },
+  "tabBar": {
+    "color": "#9ca3af",
+    "selectedColor": "#10b981",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      { "pagePath": "pages/index/index", "text": "首页" },
+      { "pagePath": "pages/public/public", "text": "大厅" },
+      { "pagePath": "pages/messages/messages", "text": "消息" },
+      { "pagePath": "pages/me/me", "text": "我的" }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

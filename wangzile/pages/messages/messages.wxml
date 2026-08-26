@@ -1,0 +1,16 @@
+<scroll-view scroll-y class="page-scroll">
+  <view class="empty" wx:if="{{!conversations.length}}">还没有消息</view>
+  <view class="conv-item" wx:for="{{conversations}}" wx:key="product_id" data-pid="{{item.product_id}}" bindtap="goChat">
+    <view class="avatar" style="background:{{item.avatarColor}};width:80rpx;height:80rpx;font-size:36rpx;">{{item.other_name[0]}}</view>
+    <view class="conv-main">
+      <view class="conv-top">
+        <text class="conv-name">{{item.other_name}}</text>
+        <text class="conv-time">{{item.last_time}}</text>
+      </view>
+      <view class="conv-prod">商品: {{item.product_name}}</view>
+      <view class="conv-last">{{item.last_content}}
+        <text wx:if="{{item.unread}}" class="badge">{{item.unread}}</text>
+      </view>
+    </view>
+  </view>
+</scroll-view>

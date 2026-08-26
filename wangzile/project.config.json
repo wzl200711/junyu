@@ -1,0 +1,44 @@
+{
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "postcss": true,
+    "minified": true,
+    "uglifyFileName": false,
+    "enhance": true,
+    "packNpmRelationList": [],
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    },
+    "useCompilerPlugins": false,
+    "compileWorklet": false,
+    "uploadWithSourceMap": true,
+    "packNpmManually": false,
+    "minifyWXSS": true,
+    "minifyWXML": true,
+    "localPlugins": false,
+    "disableUseStrict": false,
+    "condition": false
+  },
+  "compileType": "miniprogram",
+  "simulatorPluginLibVersion": {},
+  "packOptions": {
+    "ignore": [
+      { "type": "folder", "value": "public" },
+      { "type": "folder", "value": "node_modules" },
+      { "type": "folder", "value": "uploads" },
+      { "type": "folder", "value": ".git" },
+      { "type": "file", "value": "server.py" },
+      { "type": "file", "value": "start_external.py" },
+      { "type": "file", "value": "autostart.vbs" },
+      { "type": "file", "value": "data.sqlite" },
+      { "type": "suffix", "value": ".bat" },
+      { "type": "suffix", "value": ".pyc" }
+    ],
+    "include": []
+  },
+  "appid": "wx45efabe406d7e904",
+  "editorSetting": {}
+}

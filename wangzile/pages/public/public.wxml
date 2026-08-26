@@ -1,0 +1,35 @@
+<!-- pages/public/public.wxml - 聊天大厅 -->
+<view class="public-page">
+  <view class="pub-tabs">
+    <view class="pub-tab active">聊天大厅</view>
+    <view class="pub-tab" bindtap="goVideos">🎬 短视频</view>
+  </view>
+  <scroll-view scroll-y class="pub-msg-list" scroll-into-view="pub-bottom">
+    <view class="empty" wx:if="{{!messages.length}}">还没有消息, 发一条打个招呼吧 👋</view>
+    <view class="pub-msg-row {{item.isMine ? 'pub-mine' : 'pub-other'}}" wx:for="{{messages}}" wx:key="id">
+      <view class="avatar pub-avatar" style="background:{{item.avatarColor}}" bindtap="goUserProfile" data-uid="{{item.user_id}}">{{item.userInitial}}</view>
+      <view class="pub-msg-content">
+        <view class="pub-msg-meta">
+          <text class="pub-msg-name" bindtap="goUserProfile" data-uid="{{item.user_id}}">{{item.username}}</text>
+          <text class="pub-msg-time">{{item.timeText}}</text>
+        </view>
+        <view class="pub-bubble">
+          <text wx:if="{{item.content}}">{{item.content}}</text>
+          <image wx:if="{{item.image}}" class="pub-msg-image" src="{{item.image}}" mode="widthFix" bindtap="previewImage" data-src="{{item.image}}" />
+          <video wx:if="{{item.video}}" class="pub-msg-video" src="{{item.video}}" controls />
+          <view wx:if="{{item.product_id}}" class="pub-product" data-pid="{{item.product_id}}" catchtap="goProductDetail">
+            📦 查看商品 #{{item.product_id}}
+          </view>
+        </view>
+      </view>
+    </view>
+    <view id="pub-bottom"></view>
+  </scroll-view>
+  <view class="pub-input-bar">
+    <input class="pub-input" placeholder="说点什么吧..." value="{{inputContent}}" bindinput="onInput" confirm-type="send" bindconfirm="send" />
+    <view class="pub-icon-btn" bindtap="sendImage">🖼️</view>
+    <view class="pub-icon-btn" bindtap="sendVideo">🎥</view>
+    <view class="pub-icon-btn" bindtap="shareProduct">📦</view>
+    <view class="btn btn-primary btn-small pub-send-btn" bindtap="send">发送</view>
+  </view>
+</view>

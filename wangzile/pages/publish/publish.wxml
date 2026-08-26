@@ -1,0 +1,37 @@
+<scroll-view scroll-y class="page-scroll">
+  <view class="form-group">
+    <view class="form-label">商品图片</view>
+    <view class="image-picker" bindtap="pickImage">
+      <image wx:if="{{imageSrc}}" src="{{imageSrc}}" mode="aspectFit" class="picked-img" />
+      <view wx:else class="image-placeholder">
+        <text class="ip-icon">+</text>
+        <text>添加商品图片</text>
+      </view>
+    </view>
+    <button wx:if="{{imageSrc}}" class="btn btn-small btn-danger clear-img" bindtap="clearImage">清除图片</button>
+  </view>
+
+  <view class="form-group">
+    <view class="form-label">商品名称</view>
+    <input class="form-input" placeholder="商品名称" value="{{name}}" bindinput="onName" />
+  </view>
+
+  <view class="form-group">
+    <view class="form-label">价格</view>
+    <input class="form-input" type="digit" placeholder="¥0.00" value="{{price}}" bindinput="onPrice" />
+  </view>
+
+  <view class="form-group">
+    <view class="form-label">分类</view>
+    <picker mode="selector" range="{{categories}}" bindchange="onCategory">
+      <view class="picker-val">{{category}}</view>
+    </picker>
+  </view>
+
+  <view class="form-group">
+    <view class="form-label">商品介绍</view>
+    <textarea class="form-textarea" placeholder="描述一下你的商品..." value="{{description}}" bindinput="onDesc" />
+  </view>
+
+  <button class="btn btn-primary btn-block submit-btn" bindtap="submit">挂出</button>
+</scroll-view>

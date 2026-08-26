@@ -1,0 +1,40 @@
+<scroll-view scroll-y class="page-scroll" wx:if="{{user}}">
+  <view class="hero" style="background:{{user.background || 'linear-gradient(135deg, #10b981, #059669)'}};">
+    <view class="hero-inner">
+      <view class="hero-avatar">
+        <image wx:if="{{user.avatar}}" src="{{user.avatar}}" mode="aspectFill" class="avatar-img" />
+        <view wx:else class="avatar" style="background:{{avatarColor}};width:120rpx;height:120rpx;font-size:52rpx;">{{user.username[0]}}</view>
+      </view>
+      <view class="hero-name">{{user.username}}</view>
+      <view class="hero-bio">{{user.bio || '这个人很懒, 什么也没留下~'}}</view>
+      <button wx:if="{{!isMe}}" class="btn btn-primary btn-small" bindtap="goChat">与TA聊天</button>
+    </view>
+  </view>
+
+  <view class="section-title">TA的商品 ({{products.length}})</view>
+  <view class="product-grid">
+    <view class="product-card" wx:for="{{products}}" wx:key="id" data-id="{{item.id}}" bindtap="goDetail">
+      <image wx:if="{{item.image}}" src="{{item.image}}" mode="aspectFill" class="p-img" />
+      <view wx:else class="p-img p-img-empty"><text>无图</text></view>
+      <view class="p-body">
+        <view class="p-name">{{item.name}}</view>
+        <view class="p-meta">
+          <text class="price">{{item.priceText}}</text>
+          <text class="p-views">👀{{item.views}}</text>
+        </view>
+        <view class="p-cat">{{item.category}}</view>
+      </view>
+    </view>
+  </view>
+  <view class="empty" wx:if="{{!products.length}}">这位卖家暂时没有在售商品</view>
+
+  <view class="section-title">TA的分享 ({{videos.length}})</view>
+  <view class="video-grid" wx:if="{{videos.length}}">
+    <view class="video-cell" wx:for="{{videos}}" wx:key="id" data-id="{{item.id}}" bindtap="goVideo">
+      <image wx:if="{{item.media_type === 'image'}}" class="v-thumb" src="{{item.mediaUrl}}" mode="aspectFill" />
+      <view wx:else class="v-thumb v-thumb-video"><text class="v-play">▶</text></view>
+      <view class="v-likes">❤️ {{item.likes}}</view>
+    </view>
+  </view>
+  <view class="empty" wx:if="{{!videos.length}}">还没有分享内容</view>
+</scroll-view>

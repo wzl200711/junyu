@@ -1,0 +1,89 @@
+/* pages/orders/orders.wxss */
+.order-page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.sub-tabs {
+  display: flex;
+  background: #fff;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+.sub-tab {
+  flex: 1;
+  text-align: center;
+  padding: 24rpx;
+  font-size: 28rpx;
+  color: #6b7280;
+}
+.sub-tab.active {
+  color: #10b981;
+  font-weight: 600;
+  border-bottom: 4rpx solid #10b981;
+}
+
+.order-scroll {
+  flex: 1;
+  padding: 24rpx;
+}
+
+.order-card {
+  display: flex;
+  background: #fff;
+  border-radius: 16rpx;
+  margin-bottom: 16rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+}
+.o-img {
+  width: 180rpx;
+  height: 180rpx;
+  background: #f4f6f5;
+  flex-shrink: 0;
+  display: block;
+}
+.o-img-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+  font-size: 24rpx;
+}
+.o-main {
+  flex: 1;
+  padding: 20rpx;
+  display: flex;
+  flex-direction: column;
+}
+.o-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.o-name {
+  font-size: 30rpx;
+  flex: 1;
+  margin-right: 12rpx;
+  color: #1f2937;
+}
+.o-info {
+  font-size: 24rpx;
+  color: #6b7280;
+  margin: 8rpx 0;
+}
+.o-tracking {
+  font-size: 24rpx;
+  color: #10b981;
+  margin: 4rpx 0;
+}
+.o-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+}
+.o-action {
+  display: flex;
+  gap: 8rpx;
+}

@@ -1,0 +1,56 @@
+<scroll-view scroll-y class="page-scroll" wx:if="{{product}}">
+  <image wx:if="{{product.image}}" src="{{product.image}}" mode="aspectFit" class="detail-img" />
+  <view wx:else class="detail-img detail-img-empty"><text>暂无图片</text></view>
+
+  <view class="detail-info">
+    <view class="detail-name">{{product.name}}</view>
+    <view class="detail-price-row">
+      <text class="price detail-price">{{product.priceText}}</text>
+      <text class="tag tag-orange">{{product.category}}</text>
+    </view>
+
+    <view class="detail-meta">
+      <view class="seller-link" bindtap="goUserProfile">
+        <view class="avatar seller-avatar" style="background:{{product.avatarColor}};width:40rpx;height:40rpx;font-size:24rpx;">{{product.owner_name[0]}}</view>
+        <text>卖家: {{product.owner_name}}</text>
+      </view>
+      <text class="detail-views">👀 {{product.views}} 次浏览</text>
+    </view>
+
+    <view class="detail-desc-title">商品介绍</view>
+    <view class="detail-desc">{{product.description || '（卖家暂未填写商品介绍）'}}</view>
+
+    <!-- 操作按钮 -->
+    <view class="detail-action">
+      <block wx:if="{{product.status !== 'for_sale'}}">
+        <text class="tag tag-gray">已售出</text>
+        <button wx:if="{{isAdmin}}" class="btn btn-danger btn-block" bindtap="adminDelete">删除商品</button>
+      </block>
+      <block wx:elif="{{isMine}}">
+        <button class="btn btn-block" bindtap="goChat">查看咨询</button>
+        <button class="btn btn-danger btn-block" bindtap="delist">下架商品</button>
+      </block>
+      <block wx:elif="{{isAdmin}}">
+        <button class="btn btn-danger btn-block" bindtap="adminDelete">删除商品</button>
+      </block>
+      <block wx:else>
+        <button class="btn btn-block" bindtap="goChat">与卖家联系</button>
+        <button class="btn btn-primary btn-block" bindtap="startBuy">立即购买</button>
+      </block>
+    </view>
+  </view>
+
+  <!-- 其他商品 -->
+  <view class="section-title">其他商品</view>
+  <view class="product-grid" wx:if="{{others.length}}">
+    <view class="product-card" wx:for="{{others}}" wx:key="id" data-id="{{item.id}}" bindtap="goOtherDetail">
+      <image wx:if="{{item.image}}" src="{{item.image}}" mode="aspectFill" class="p-img" />
+      <view wx:else class="p-img p-img-empty"><text>无图</text></view>
+      <view class="p-body">
+        <view class="p-name">{{item.name}}</view>
+        <text class="price">{{item.priceText}}</text>
+      </view>
+    </view>
+  </view>
+  <view class="empty" wx:else>暂无其他商品</view>
+</scroll-view>

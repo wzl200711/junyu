@@ -1,0 +1,61 @@
+/* pages/messages/messages.wxss */
+.page-scroll { height: 100vh; }
+
+.conv-item {
+  display: flex;
+  align-items: center;
+  padding: 24rpx;
+  background: #fff;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+.conv-item:active { background: #f9fafb; }
+
+.conv-main {
+  flex: 1;
+  margin-left: 20rpx;
+  overflow: hidden;
+}
+.conv-top {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8rpx;
+}
+.conv-name {
+  font-size: 30rpx;
+  font-weight: 500;
+  color: #1f2937;
+}
+.conv-time {
+  font-size: 22rpx;
+  color: #9ca3af;
+}
+.conv-prod {
+  font-size: 24rpx;
+  color: #6b7280;
+  margin-bottom: 4rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.conv-last {
+  font-size: 26rpx;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.badge {
+  background: #ef4444;
+  color: #fff;
+  font-size: 20rpx;
+  min-width: 32rpx;
+  height: 32rpx;
+  line-height: 32rpx;
+  text-align: center;
+  padding: 0 8rpx;
+  border-radius: 999rpx;
+  margin-left: 8rpx;
+}

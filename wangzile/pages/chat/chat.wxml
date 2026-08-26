@@ -1,0 +1,17 @@
+<view class="chat-page">
+  <scroll-view scroll-y class="chat-body" scroll-into-view="msg-bottom">
+    <view class="chat-empty" wx:if="{{!messages.length}}">还没有消息, 先和对方打个招呼吧 👋</view>
+    <view class="msg-row {{item.isMine ? 'msg-mine' : 'msg-other'}}" wx:for="{{messages}}" wx:key="id">
+      <view class="avatar" style="background:{{item.avatarColor}};width:60rpx;height:60rpx;font-size:28rpx;">{{item.sender_name[0]}}</view>
+      <view class="msg-col">
+        <view class="msg-head"><text class="msg-name">{{item.sender_name}}</text><text class="msg-time">{{item.timeText}}</text></view>
+        <view class="msg-bubble">{{item.content}}</view>
+      </view>
+    </view>
+    <view id="msg-bottom"></view>
+  </scroll-view>
+  <view class="chat-input-bar">
+    <input class="chat-input" placeholder="输入消息..." value="{{inputContent}}" bindinput="onInput" confirm-type="send" bindconfirm="send" />
+    <button class="btn btn-primary btn-small" bindtap="send">发送</button>
+  </view>
+</view>

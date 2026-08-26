@@ -1,0 +1,56 @@
+/* pages/my-products/my-products.wxss */
+.page-scroll {
+  height: 100vh;
+  padding: 24rpx;
+}
+
+.mp-card {
+  display: flex;
+  background: #fff;
+  border-radius: 16rpx;
+  margin-bottom: 16rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+}
+.mp-img {
+  width: 200rpx;
+  height: 200rpx;
+  background: #f4f6f5;
+  flex-shrink: 0;
+  display: block;
+}
+.mp-img-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+  font-size: 24rpx;
+}
+.mp-main {
+  flex: 1;
+  padding: 20rpx;
+  display: flex;
+  flex-direction: column;
+}
+.mp-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.mp-name {
+  font-size: 30rpx;
+  flex: 1;
+  margin-right: 12rpx;
+  color: #1f2937;
+}
+.mp-cat {
+  font-size: 24rpx;
+  color: #9ca3af;
+  margin: 8rpx 0;
+}
+.mp-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+}

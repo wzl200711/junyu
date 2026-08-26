@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#10b981" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="骏宇超市" />
+  <link rel="manifest" href="/manifest.json" />
+  <title>骏宇超市</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="logo">
+      <span class="logo-mark">骏</span>
+      <span class="logo-text">骏宇超市</span>
+    </div>
+    <div class="header-right">
+      <span id="balance" class="balance hidden">¥0.00</span>
+      <button id="logoutBtn" class="btn-link hidden" onclick="logout()">退出</button>
+    </div>
+  </header>
+
+  <main class="app-main" id="app">
+    <!-- 登录/注册 -->
+    <section id="authView" class="view view-auth">
+      <div class="auth-card">
+        <div class="auth-head">
+          <div class="auth-emblem">骏</div>
+          <h2 id="authTitle">欢迎光临</h2>
+          <p class="auth-sub">骏宇超市 · 二手好物流转</p>
+        </div>
+        <form id="authForm" onsubmit="return handleAuth(event)">
+          <label>用户名
+            <input type="text" id="username" required autocomplete="username" placeholder="给自己起个名字" />
+          </label>
+          <label>登录密码
+            <input type="password" id="password" required autocomplete="current-password" placeholder="登录密码" />
+          </label>
+          <button type="submit" class="btn btn-primary btn-block" id="authSubmit">登录</button>
+          <p class="switch-tip" id="switchTip">
+            没有账号? <a href="#" onclick="switchAuth('register'); return false;">立即注册</a>
+          </p>
+          <p class="forgot-tip"><a href="#" onclick="openResetModal(); return false;">忘记密码? 通过手机号找回</a></p>
+        </form>
+      </div>
+    </section>
+
+    <!-- 主界面 -->
+    <section id="appView" class="view hidden">
+      <!-- Tab: 超市 -->
+      <div class="tab-pane" id="tab-market">
+        <div class="pane-header">
+          <h3>骏宇超市</h3>
+          <span class="pane-sub" id="marketSub"></span>
+        </div>
+
+        <div class="bind-banner hidden" id="bindBanner">
+          <div class="bb-left">
+            <span class="bb-icon">📱</span>
+            <div class="bb-text">
+              <div class="bb-title">绑定手机号方便找回账号</div>
+              <div class="bb-sub">未绑定手机号将无法找回密码</div>
+            </div>
+          </div>
+          <button class="btn btn-small btn-primary" onclick="switchTab('me')">去绑定</button>
+        </div>
+
+        <!-- 广告位 (3个) -->
+        <div class="ad-strip" id="adStrip"></div>
+
+        <div class="category-bar" id="categoryBar"></div>
+
+        <div class="hot-section hidden" id="hotSection">
+          <div class="section-title"><span class="st-fire">🔥</span> 大家都在看的商品</div>
+          <div class="hot-scroll" id="hotList"></div>
+        </div>
+
+        <div class="section-title" id="allTitle">全部商品</div>
+        <div id="productList" class="product-list"></div>
+      </div>
+
+      <!-- Tab: 挂出 -->
+      <div class="tab-pane hidden" id="tab-list">
+        <div class="pane-header">
+          <h3>挂出商品</h3>
+          <span class="pane-sub">填好信息上架</span>
+        </div>
+        <form id="listForm" class="list-form" onsubmit="return submitProduct(event)">
+          <label class="image-picker" for="pImage">
+            <div id="imagePreview" class="image-preview">
+              <div class="image-placeholder">
+                <span class="ip-icon">+</span>
+                <span>添加商品图片</span>
+              </div>
+            </div>
+            <input type="file" id="pImage" accept="image/*" hidden onchange="onImagePick(event)" />
+          </label>
+          <label>商品名称
+            <input type="text" id="pName" required placeholder="给商品起个名" />
+          </label>
+          <label>商品分类
+            <select id="pCategory"></select>
+          </label>
+          <label>商品描述
+            <textarea id="pDesc" rows="3" placeholder="描述成色、来源等"></textarea>
+          </label>
+          <label>价格 (元)
+            <input type="number" id="pPrice" step="0.01" min="0.01" required placeholder="0.00" />
+          </label>
+          <button type="submit" class="btn btn-primary btn-block">确认挂出</button>
+        </form>
+      </div>
+
+      <!-- Tab: 订单 -->
+      <div class="tab-pane hidden" id="tab-orders">
+        <div class="pane-header">
+          <h3>我的订单</h3>
+        </div>
+        <div class="sub-tabs">
+          <button class="sub-tab active" data-sub="buy" onclick="switchOrderSub('buy')">我买到的</button>
+          <button class="sub-tab" data-sub="sell" onclick="switchOrderSub('sell')">我卖出的</button>
+        </div>
+        <div id="orderList" class="order-list"></div>
+      </div>
+
+      <!-- Tab: 我的商品 -->
+      <div class="tab-pane hidden" id="tab-myproducts">
+        <div class="pane-header">
+          <h3>我的商品</h3>
+          <span class="pane-sub" id="myProductsSub"></span>
+        </div>
+        <div id="myProductList" class="my-product-list"></div>
+      </div>
+
+      <!-- Tab: 我的消息 -->
+      <div class="tab-pane hidden" id="tab-messages">
+        <div class="pane-header">
+          <h3>我的消息</h3>
+        </div>
+        <div id="convList" class="conv-list"></div>
+      </div>
+
+      <!-- Tab: 公众聊天 -->
+      <div class="tab-pane hidden" id="tab-public">
+        <div class="pane-header">
+          <h3>公众聊天</h3>
+          <span class="pane-sub">所有人都可以在这里聊天</span>
+        </div>
+        <div id="publicMsgList" class="public-msg-list"></div>
+        <form class="public-input-bar" onsubmit="return sendPublicMsg(event)">
+          <input type="text" id="publicInput" placeholder="说点什么吧..." autocomplete="off" />
+          <button type="button" class="btn btn-small" onclick="shareProductToPublic()">📦 分享商品</button>
+          <button type="submit" class="btn btn-primary btn-small">发送</button>
+        </form>
+      </div>
+
+      <!-- Tab: 我 -->
+      <div class="tab-pane hidden" id="tab-me">
+        <div class="profile-card" id="myProfileCard">
+          <div class="profile-bg" id="myProfileBg"></div>
+          <div class="profile-inner">
+            <div class="profile-avatar" id="profileAvatar" onclick="openAvatarModal()">?</div>
+            <div class="profile-name" id="profileName" onclick="openNameModal()"></div>
+            <div class="profile-role" id="profileRole"></div>
+            <div class="profile-balance" id="profileBalance"></div>
+            <div class="profile-bio" id="profileBio" onclick="openBioModal()">点击设置个人简介</div>
+            <div class="profile-edit-row">
+              <button class="btn btn-small" onclick="openAvatarModal()">换头像</button>
+              <button class="btn btn-small" onclick="openNameModal()">改名字</button>
+              <button class="btn btn-small" onclick="openBioModal()">写简介</button>
+              <button class="btn btn-small" onclick="openBackgroundModal()">换背景</button>
+            </div>
+          </div>
+        </div>
+        </div>
+        <div class="profile-grid" id="profileGrid">
+          <a class="profile-cell" onclick="switchTab('messages')">
+            <span class="pc-icon">💬</span>
+            <span class="pc-label">我的消息</span>
+            <span id="msgBadge" class="badge hidden"></span>
+          </a>
+          <a class="profile-cell" id="myProductsCell" onclick="switchTab('myproducts')">
+            <span class="pc-icon">📦</span>
+            <span class="pc-label">我的商品</span>
+          </a>
+          <a class="profile-cell" id="setTradePwdCell" onclick="openTradePwdModal()">
+            <span class="pc-icon">🔑</span>
+            <span class="pc-label" id="setTradePwdLabel">交易密码</span>
+          </a>
+          <a class="profile-cell" id="bindPhoneCell" onclick="openBindPhoneModal()">
+            <span class="pc-icon">📱</span>
+            <span class="pc-label" id="bindPhoneLabel">绑定手机</span>
+          </a>
+          <a class="profile-cell hidden" id="adminAdCell" onclick="openAdModal()">
+            <span class="pc-icon">🖼️</span>
+            <span class="pc-label">广告位</span>
+          </a>
+          <a class="profile-cell hidden" id="adminCell" onclick="location.href='/admin.html'">
+            <span class="pc-icon">⚙️</span>
+            <span class="pc-label">后台管理</span>
+          </a>
+        </div>
+        <div class="tip-card">
+          <p>· 购买商品需输入交易密码</p>
+          <p>· 付款后由平台担保, 卖家发货后才能确认收货</p>
+          <p>· 确认收货后货款才会转入卖家账户</p>
+          <p>· 余额不足时请联系管理员充值</p>
+        </div>
+        <button class="btn btn-block btn-danger profile-logout" onclick="logout()">退出登录</button>
+      </div>
+    </section>
+
+    <!-- 商品详情页 -->
+    <section id="detailView" class="view hidden">
+      <div class="detail-top">
+        <button class="back-btn" onclick="backToMarket()">‹ 返回</button>
+        <span class="detail-title">商品详情</span>
+      </div>
+      <div id="detailBody"></div>
+      <div class="section-title detail-others-title">继续逛逛</div>
+      <div id="detailOthers" class="product-list"></div>
+    </section>
+
+    <!-- 聊天页 -->
+    <section id="chatView" class="view hidden">
+      <div class="chat-top">
+        <button class="back-btn" onclick="closeChat()">‹</button>
+        <div class="chat-parties" id="chatParties"></div>
+      </div>
+      <div class="chat-body" id="chatBody"></div>
+      <form class="chat-input-bar" onsubmit="return sendChat(event)">
+        <input type="text" id="chatInput" placeholder="输入消息..." autocomplete="off" />
+        <button type="submit" class="btn btn-primary chat-send">发送</button>
+      </form>
+    </section>
+
+    <!-- 底部 Tab 栏 -->
+    <nav class="tabbar hidden" id="mainTabbar">
+      <a class="tab-item active" data-tab="market" onclick="switchTab('market')">
+        <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9M5 9v11h14V9M9 13h6M12 11v4"/></svg>
+        <span class="tab-label">超市</span>
+      </a>
+      <a class="tab-item" data-tab="list" onclick="switchTab('list')">
+        <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
+        <span class="tab-label">挂出</span>
+      </a>
+      <a class="tab-item" data-tab="myproducts" onclick="switchTab('myproducts')">
+        <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 7v10l9 4 9-4V7"/><path d="M12 11v10"/></svg>
+        <span class="tab-label">我的商品</span>
+      </a>
+      <a class="tab-item" data-tab="orders" onclick="switchTab('orders')">
+        <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
+        <span class="tab-label">订单</span>
+      </a>
+      <a class="tab-item" data-tab="messages" onclick="switchTab('messages')">
+        <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.7A8.5 8.5 0 1 1 21 11.5z"/></svg>
+        <span class="tab-label">消息</span>
+        <span id="tabMsgBadge" class="badge hidden tab-badge"></span>
+      </a>
+      <a class="tab-item" data-tab="public" onclick="switchTab('public')">
+        <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span class="tab-label">聊天</span>
+      </a>
+      <a class="tab-item" data-tab="me" onclick="switchTab('me')">
+        <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg>
+        <span class="tab-label">我</span>
+      </a>
+    </nav>
+  <!-- 用户主页 -->
+    <section id="userProfileView" class="view hidden">
+      <div class="detail-top">
+        <button class="back-btn" onclick="backFromUserProfile()">‹ 返回</button>
+        <span class="detail-title">个人主页</span>
+      </div>
+      <div id="userProfileContent"></div>
+    </section>
+  </main>
+
+  <!-- 交易密码输入弹窗 -->
+  <div id="tradePwdModal" class="modal hidden">
+    <div class="modal-card">
+      <h3 id="tradePwdTitle">输入交易密码</h3>
+      <p class="modal-sub" id="tradePwdSub">请输入交易密码以确认购买</p>
+      <form onsubmit="return confirmTradePwd(event)">
+        <input type="password" id="tradePwdInput" inputmode="numeric" placeholder="交易密码" autofocus />
+        <div class="modal-actions">
+          <button type="button" class="btn" onclick="closeTradePwdModal()">取消</button>
+          <button type="submit" class="btn btn-primary">确认</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 设置交易密码弹窗 -->
+  <div id="setTradePwdModal" class="modal hidden">
+    <div class="modal-card">
+      <h3>设置交易密码</h3>
+      <p class="modal-sub">购买商品时需验证, 请牢记</p>
+      <form onsubmit="return submitTradePwd(event)">
+        <label>交易密码 (至少 4 位)
+          <input type="password" id="tpPwd" inputmode="numeric" placeholder="设置交易密码" required />
+        </label>
+        <label>确认交易密码
+          <input type="password" id="tpPwd2" inputmode="numeric" placeholder="再次输入" required />
+        </label>
+        <div class="modal-actions">
+          <button type="button" class="btn" onclick="closeSetTradePwdModal()">取消</button>
+          <button type="submit" class="btn btn-primary">保存</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 发货弹窗 -->
+  <div id="shipModal" class="modal hidden">
+    <div class="modal-card">
+      <h3>填写快递单号</h3>
+      <form onsubmit="return submitShip(event)">
+        <label>快递单号
+          <input type="text" id="shipTrackingNo" required placeholder="如: SF1234567890" />
+        </label>
+        <div class="modal-actions">
+          <button type="button" class="btn" onclick="closeShipModal()">取消</button>
+          <button type="submit" class="btn btn-primary">确认发货</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 绑定手机号弹窗 -->
+  <div id="bindPhoneModal" class="modal hidden">
+    <div class="modal-card">
+      <h3>绑定手机号</h3>
+      <p class="modal-sub">绑定后可通过手机验证码找回密码</p>
+      <form onsubmit="return submitBindPhone(event)">
+        <label>手机号
+          <input type="tel" id="bpPhone" inputmode="numeric" maxlength="11" placeholder="11 位手机号" required />
+        </label>
+        <div class="code-row">
+          <label class="code-input-label">验证码
+            <input type="text" id="bpCode" inputmode="numeric" maxlength="6" placeholder="6 位验证码" required />
+          </label>
+          <button type="button" class="btn code-btn" id="bpSendBtn" onclick="sendSms('bind')">获取验证码</button>
+        </div>
+        <div class="sms-box hidden" id="bpSmsBox"></div>
+        <div class="modal-actions">
+          <button type="button" class="btn" onclick="closeBindPhoneModal()">取消</button>
+          <button type="submit" class="btn btn-primary">确认绑定</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 找回密码弹窗 -->
+  <div id="resetModal" class="modal hidden">
+    <div class="modal-card">
+      <h3>找回密码</h3>
+      <p class="modal-sub">需已绑定手机号, 通过验证码重置</p>
+      <form onsubmit="return submitReset(event)">
+        <label>用户名
+          <input type="text" id="rpUser" placeholder="请输入用户名" required />
+        </label>
+        <label>绑定的手机号
+          <input type="tel" id="rpPhone" inputmode="numeric" maxlength="11" placeholder="11 位手机号" required />
+        </label>
+        <div class="code-row">
+          <label class="code-input-label">验证码
+            <input type="text" id="rpCode" inputmode="numeric" maxlength="6" placeholder="6 位验证码" required />
+          </label>
+          <button type="button" class="btn code-btn" id="rpSendBtn" onclick="sendSms('reset')">获取验证码</button>
+        </div>
+        <div class="sms-box hidden" id="rpSmsBox"></div>
+        <label>新登录密码
+          <input type="password" id="rpNewPwd" placeholder="设置新密码" required />
+        </label>
+        <div class="modal-actions">
+          <button type="button" class="btn" onclick="closeResetModal()">取消</button>
+          <button type="submit" class="btn btn-primary">重置密码</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 管理广告位弹窗 -->
+  <div id="adModal" class="modal hidden">
+    <div class="modal-card">
+      <h3>管理广告位</h3>
+      <p class="modal-sub">上传图片到 3 个广告位, 仅管理员可操作</p>
+      <div id="adSlots" class="ad-slots"></div>
+    </div>
+  </div>
+
+  <!-- 换头像弹窗 -->
+  <div id="avatarModal" class="modal hidden">
+    <div class="modal-card">
+      <h3>更换头像</h3>
+      <p class="modal-sub">选择一张图片作为头像</p>
+      <div class="avatar-picker">
+        <div id="avatarPreview" class="avatar-preview">
+          <span class="avatar-ph">点击选择图片</span>
+        </div>
+        <input type="file" id="avatarFile" accept="image/*" hidden onchange="onAvatarPick(event)" />
+        <button class="btn btn-primary btn-small" onclick="document.getElementById('avatarFile').click()">选择图片</button>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn" onclick="closeAvatarModal()">取消</button>
+        <button type="button" class="btn btn-primary" onclick="saveAvatar()">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 改名字弹窗 -->
+  <div id="nameModal" class="modal hidden">
+    <div class="modal-card">
+      <h3>修改名字</h3>
+      <p class="modal-sub" id="nameModalSub">今天还可以改 2 次</p>
+      <form onsubmit="return saveName(event)">
+        <label>新名字 (2-20字)
+          <input type="text" id="newName" maxlength="20" required />
+        </label>
+        <div class="modal-actions">
+          <button type="button" class="btn" onclick="closeNameModal()">取消</button>
+          <button type="submit" class="btn btn-primary">保存</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 写简介弹窗 -->
+  <div id="bioModal" class="modal hidden">
+    <div class="modal-card">
+      <h3>个人简介</h3>
+      <p class="modal-sub">介绍一下自己吧 (最多 200 字)</p>
+      <form onsubmit="return saveBio(event)">
+        <textarea id="newBio" rows="4" maxlength="200" placeholder="写点什么..."></textarea>
+        <div class="modal-actions">
+          <button type="button" class="btn" onclick="closeBioModal()">取消</button>
+          <button type="submit" class="btn btn-primary">保存</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 换背景弹窗 -->
+  <div id="backgroundModal" class="modal hidden">
+    <div class="modal-card">
+      <h3>主页背景</h3>
+      <p class="modal-sub">选择一个预设背景, 或输入 CSS 渐变代码</p>
+      <div class="bg-presets" id="bgPresets"></div>
+      <form onsubmit="return saveBackground(event)">
+        <label>自定义背景 (CSS 颜色或渐变)
+          <input type="text" id="newBackground" placeholder="如: linear-gradient(135deg,#667eea,#764ba2)" />
+        </label>
+        <div class="bg-preview" id="bgPreview"></div>
+        <div class="modal-actions">
+          <button type="button" class="btn" onclick="closeBackgroundModal()">取消</button>
+          <button type="submit" class="btn btn-primary">保存</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 分享商品弹窗 (用于公众聊天) -->
+  <div id="shareProductModal" class="modal hidden">
+    <div class="modal-card">
+      <h3>分享我的商品</h3>
+      <p class="modal-sub">选择要分享到公众聊天的商品</p>
+      <div id="shareProductList" class="share-product-list"></div>
+      <div class="modal-actions">
+        <button type="button" class="btn" onclick="closeShareProductModal()">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="/js/app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(function(){});
+    }
+  </script>
+</body>
+</html>

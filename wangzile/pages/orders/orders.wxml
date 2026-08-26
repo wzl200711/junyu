@@ -1,0 +1,28 @@
+<view class="order-page">
+  <view class="sub-tabs">
+    <view class="sub-tab {{sub === 'buy' ? 'active' : ''}}" data-sub="buy" bindtap="switchSub">我买的</view>
+    <view class="sub-tab {{sub === 'sell' ? 'active' : ''}}" data-sub="sell" bindtap="switchSub">我卖的</view>
+  </view>
+  <scroll-view scroll-y class="order-scroll">
+    <view class="empty" wx:if="{{!orders.length}}">{{sub === 'buy' ? '还没有购买记录' : '还没有卖出记录'}}</view>
+    <view class="order-card" wx:for="{{orders}}" wx:key="id">
+      <image wx:if="{{item.image}}" src="{{item.image}}" mode="aspectFill" class="o-img" />
+      <view wx:else class="o-img o-img-empty"><text>无图</text></view>
+      <view class="o-main">
+        <view class="o-top">
+          <text class="o-name">{{item.product_name}}</text>
+          <text class="tag {{item.statusCls}}">{{item.statusText}}</text>
+        </view>
+        <view class="o-info">{{sub === 'buy' ? '卖家' : '买家'}}: {{sub === 'buy' ? item.seller_name : item.buyer_name}}</view>
+        <view wx:if="{{item.tracking_no}}" class="o-tracking">快递: {{item.tracking_no}}</view>
+        <view class="o-bottom">
+          <text class="price">{{item.priceText}}</text>
+          <view class="o-action">
+            <button wx:if="{{sub === 'sell' && item.status === 'pending_shipment'}}" class="btn btn-primary btn-small" bindtap="ship" data-id="{{item.id}}">填写快递单号</button>
+            <button wx:if="{{sub === 'buy' && item.status === 'shipped'}}" class="btn btn-success btn-small" bindtap="confirm" data-id="{{item.id}}">确认收货</button>
+          </view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+</view>

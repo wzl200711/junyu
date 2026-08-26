@@ -1,0 +1,71 @@
+<!-- pages/videos/videos.wxml - 短视频流 -->
+<view class="video-page">
+  <!-- 返回按钮 -->
+  <view class="back-btn" bindtap="goBack">‹</view>
+
+  <swiper wx:if="{{videos.length}}" class="video-swiper" vertical="true" bindchange="onSwiperChange" current="{{current}}">
+    <swiper-item wx:for="{{videos}}" wx:key="id" wx:for-index="index">
+      <view class="video-card">
+        <image wx:if="{{item.media_type === 'image'}}" class="video-media" src="{{item.mediaUrl}}" mode="aspectFill" />
+        <video wx:else class="video-media" src="{{item.mediaUrl}}" autoplay loop controls />
+        <view class="video-overlay" wx:if="{{item.description}}">
+          <view class="video-desc">{{item.description}}</view>
+        </view>
+        <view class="video-side">
+          <view class="video-avatar" style="background:{{item.avatarColor}}" data-uid="{{item.user_id}}" bindtap="goUserProfile">{{item.userInitial}}</view>
+          <view class="side-btn" data-vid="{{item.id}}" data-idx="{{index}}" bindtap="like">
+            <text class="side-icon">{{item.liked ? '❤️' : '🤍'}}</text>
+            <text class="side-count">{{item.likes}}</text>
+          </view>
+          <view class="side-btn" data-vid="{{item.id}}" bindtap="openComment">
+            <text class="side-icon">💬</text>
+            <text class="side-count">评论</text>
+          </view>
+          <view wx:if="{{item.user_id === currentUserId || isAdmin}}" class="side-btn" data-vid="{{item.id}}" data-idx="{{index}}" bindtap="deleteVideo">
+            <text class="side-icon">🗑️</text>
+            <text class="side-count">删除</text>
+          </view>
+        </view>
+        <view class="video-bottom">
+          <view class="video-user">@{{item.username}}</view>
+          <view class="video-time">{{item.timeText}}</view>
+        </view>
+      </view>
+    </swiper-item>
+  </swiper>
+
+  <!-- 空状态 -->
+  <view class="empty" wx:if="{{!videos.length}}">
+    <view class="empty-icon">🎬</view>
+    <view>还没有内容</view>
+    <view class="btn btn-primary btn-small pub-btn" bindtap="publish">发布第一条</view>
+  </view>
+
+  <!-- 发布按钮 -->
+  <view class="pub-fab" bindtap="publish">+</view>
+
+  <!-- 评论弹窗 -->
+  <view class="comment-mask" wx:if="{{showComment}}" bindtap="closeComment">
+    <view class="comment-panel" catchtap="">
+      <view class="comment-header">
+        <text>评论</text>
+        <text class="close-btn" bindtap="closeComment">✕</text>
+      </view>
+      <scroll-view scroll-y class="comment-list">
+        <view class="comment-empty" wx:if="{{!comments.length}}">还没有评论, 说点什么吧</view>
+        <view class="comment-item" wx:for="{{comments}}" wx:key="id">
+          <view class="avatar" style="background:{{item.avatarColor}}">{{item.userInitial}}</view>
+          <view class="comment-main">
+            <view class="comment-name">{{item.username}}</view>
+            <view class="comment-text">{{item.content}}</view>
+            <view class="comment-time">{{item.timeText}}</view>
+          </view>
+        </view>
+      </scroll-view>
+      <view class="comment-input-bar">
+        <input class="comment-input" placeholder="说点什么..." value="{{commentInput}}" bindinput="onCommentInput" />
+        <view class="btn btn-primary btn-small" bindtap="sendComment">发送</view>
+      </view>
+    </view>
+  </view>
+</view>

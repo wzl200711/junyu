@@ -1,0 +1,27 @@
+<!-- pages/login/login.wxml -->
+<view class="login-page">
+  <view class="login-header">
+    <view class="logo">骏</view>
+    <view class="title">骏宇超市</view>
+    <view class="subtitle">校园二手好物, 挂出即售</view>
+  </view>
+
+  <view class="login-card">
+    <view class="input-row">
+      <text class="input-label">账号</text>
+      <input class="login-input" placeholder="给自己起个名字" value="{{username}}" bindinput="onUsername" />
+    </view>
+    <view class="input-row">
+      <text class="input-label">密码</text>
+      <input class="login-input" placeholder="登录密码" password="true" value="{{password}}" bindinput="onPassword" />
+    </view>
+
+    <button class="btn btn-primary btn-block login-btn" bindtap="submit">
+      {{mode === 'login' ? '登 录' : '注 册'}}
+    </button>
+
+    <view class="switch-mode" bindtap="toggleMode">
+      {{mode === 'login' ? '没有账号? 去注册' : '已有账号? 去登录'}}
+    </view>
+  </view>
+</view>

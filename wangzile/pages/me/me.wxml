@@ -1,0 +1,38 @@
+<scroll-view scroll-y class="page-scroll" wx:if="{{user}}">
+  <!-- 个人资料卡 -->
+  <view class="profile-card">
+    <view class="profile-bg" style="background:{{user.background || 'linear-gradient(135deg, #10b981, #059669)'}};"></view>
+    <view class="profile-inner">
+      <view class="profile-avatar" bindtap="changeAvatar">
+        <image wx:if="{{user.avatar}}" src="{{user.avatar}}" mode="aspectFill" class="avatar-img" />
+        <view wx:else class="avatar" style="background:{{avatarColor}};width:120rpx;height:120rpx;font-size:52rpx;">{{user.username[0]}}</view>
+      </view>
+      <view class="profile-name" bindtap="changeName">{{user.username}}</view>
+      <view class="profile-role">{{user.is_admin ? '管理员' : '超市用户'}}</view>
+      <view class="profile-balance">余额 {{user.balanceText}}</view>
+      <view class="profile-bio" bindtap="changeBio">{{user.bio || '点击设置个人简介'}}</view>
+      <view class="profile-edit-row">
+        <button class="btn btn-small" bindtap="changeAvatar">换头像</button>
+        <button class="btn btn-small" bindtap="changeName">改名字</button>
+        <button class="btn btn-small" bindtap="changeBio">写简介</button>
+        <button class="btn btn-small" bindtap="changeBackground">换背景</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 功能列表 -->
+  <view class="menu-list">
+    <view class="menu-item" bindtap="goPublish" wx:if="{{!user.is_admin}}">
+      <text>发布商品</text>
+      <text class="arrow">›</text>
+    </view>
+    <view class="menu-item" bindtap="goMyProducts" wx:if="{{!user.is_admin}}">
+      <text>我的商品</text>
+      <text class="arrow">›</text>
+    </view>
+    <view class="menu-item" bindtap="logout">
+      <text>退出登录</text>
+      <text class="arrow">›</text>
+    </view>
+  </view>
+</scroll-view>

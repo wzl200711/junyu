@@ -1,0 +1,78 @@
+/* pages/me/me.wxss */
+.page-scroll { height: 100vh; }
+
+.profile-card {
+  margin: 24rpx;
+  border-radius: 24rpx;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.06);
+}
+.profile-bg {
+  height: 200rpx;
+  background: linear-gradient(135deg, #10b981, #059669);
+  background-size: cover;
+  background-position: center;
+}
+.profile-inner {
+  padding: 0 32rpx 32rpx;
+  text-align: center;
+  margin-top: -60rpx;
+  position: relative;
+}
+.profile-avatar {
+  width: 120rpx;
+  height: 120rpx;
+  margin: 0 auto 16rpx;
+  border-radius: 50%;
+  border: 6rpx solid #fff;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
+}
+.profile-name {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #1f2937;
+}
+.profile-role {
+  font-size: 24rpx;
+  color: #10b981;
+  margin: 8rpx 0;
+}
+.profile-balance {
+  font-size: 26rpx;
+  color: #6b7280;
+  margin-bottom: 8rpx;
+}
+.profile-bio {
+  font-size: 26rpx;
+  color: #9ca3af;
+  padding: 12rpx 0;
+}
+.profile-edit-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  justify-content: center;
+  margin-top: 16rpx;
+}
+.profile-edit-row .btn { margin: 4rpx; }
+
+.menu-list {
+  margin: 24rpx;
+  background: #fff;
+  border-radius: 20rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+.menu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 32rpx;
+  font-size: 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+.menu-item:last-child { border-bottom: none; }
+.arrow { color: #d1d5db; font-size: 36rpx; }

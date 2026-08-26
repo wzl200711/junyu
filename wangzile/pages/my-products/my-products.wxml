@@ -1,0 +1,18 @@
+<scroll-view scroll-y class="page-scroll">
+  <view class="empty" wx:if="{{!products.length}}">还没有挂出过商品</view>
+  <view class="mp-card" wx:for="{{products}}" wx:key="id" data-id="{{item.id}}" bindtap="goDetail">
+    <image wx:if="{{item.image}}" src="{{item.image}}" mode="aspectFill" class="mp-img" />
+    <view wx:else class="mp-img mp-img-empty"><text>无图</text></view>
+    <view class="mp-main">
+      <view class="mp-top">
+        <text class="mp-name">{{item.name}}</text>
+        <text class="tag {{item.status === 'for_sale' ? 'tag-green' : 'tag-gray'}}">{{item.status === 'for_sale' ? '在售' : (item.status === 'delisted' ? '已下架' : (item.status === 'completed' ? '已售出' : item.status))}}</text>
+      </view>
+      <view class="mp-cat">{{item.category}}</view>
+      <view class="mp-bottom">
+        <text class="price">{{item.priceText}}</text>
+        <button wx:if="{{item.status === 'for_sale'}}" class="btn btn-small btn-danger" catchtap="delist" data-id="{{item.id}}" data-name="{{item.name}}">下架</button>
+      </view>
+    </view>
+  </view>
+</scroll-view>
